@@ -1,0 +1,4 @@
+core_shop_payment:
+    pimcore_admin:
+        js:
+            heidelpay: /bundles/heidelpay/pimcore/js/heidelpay.js

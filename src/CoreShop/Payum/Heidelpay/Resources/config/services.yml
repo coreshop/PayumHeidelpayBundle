@@ -1,0 +1,21 @@
+services:
+    CoreShop\Payum\HeidelpayBundle\Form\Payment\HeidelpayType:
+        tags:
+            - { name: coreshop.gateway_configuration_type, type: heidelpay }
+            - { name: form.type }
+
+    payum.heidelpay_gateway_factory:
+        class: Payum\Core\Bridge\Symfony\Builder\GatewayFactoryBuilder
+        arguments: [CoreShop\Payum\Heidelpay\HeidelpayGatewayFactory]
+        tags:
+            - {name: payum.gateway_factory_builder, factory: heidelpay }
+
+    CoreShop\Payum\HeidelpayBundle\Extension\PopulateHeidelpayExtension:
+        autowire: true
+        tags:
+            - { name: payum.extension, alias: heidelpay_populate, factory: heidelpay, gateway: heidelpay, prepend: false }
+
+    CoreShop\Payum\HeidelpayBundle\Extension\ObtainTokenExtension:
+        autowire: true
+        tags:
+            - { name: payum.extension, alias: heidelpay_obtain_token, factory: heidelpay, gateway: heidelpay, prepend: false }
