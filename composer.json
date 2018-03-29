@@ -20,14 +20,15 @@
     ],
     "require": {
         "php": "^7.0",
-        "coreshop/payum-heidelpay": "~1.0.0"
+        "coreshop/payum-heidelpay": "~1.0.0",
+        "coreshop/payum-bundle": "^2.0"
     },
     "config": {
         "bin-dir": "bin"
     },
     "autoload": {
         "psr-4": {
-            "CoreShop\\Payum\\HeidelpayBundle\\": "src/CoreShop/Payum/Heidelpay"
+            "CoreShop\\Payum\\HeidelpayBundle\\": "src/CoreShop/Payum/HeidelpayBundle"
         }
     },
     "extra": {

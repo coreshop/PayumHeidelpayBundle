@@ -12,7 +12,7 @@ The Heidelpay Payum Implementation currently only supports following gateways:
 
 #### 1. Composer
 ```json
-    "coreshop/payum-heidelpay-bundle": "~1.0.0"
+    "coreshop/payum-heidelpay-bundle": "^2.0"
 ```
 
 #### 2. Activate
