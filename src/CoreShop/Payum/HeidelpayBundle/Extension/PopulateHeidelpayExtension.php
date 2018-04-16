@@ -66,8 +66,8 @@ final class PopulateHeidelpayExtension implements ExtensionInterface
         $gatewayLanguage = 'en';
         $customerData = [];
 
-        if (!empty($order->getOrderLanguage())) {
-            $gatewayLanguage = $order->getOrderLanguage();
+        if (!empty($order->getLocaleCode())) {
+            $gatewayLanguage = $order->getLocaleCode();
 
             if (strpos($gatewayLanguage, '_') === true) {
                 $gatewayLanguage = reset(explode('_', $gatewayLanguage));
