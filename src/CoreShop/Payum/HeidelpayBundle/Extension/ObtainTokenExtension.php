@@ -14,7 +14,7 @@ namespace CoreShop\Payum\HeidelpayBundle\Extension;
 
 use CoreShop\Component\Core\Model\OrderInterface;
 use CoreShop\Component\Order\Repository\OrderRepositoryInterface;
-use CoreShop\Component\Payment\Model\PaymentInterface;
+use CoreShop\Component\Core\Model\PaymentInterface;
 use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionInterface;
 use Payum\Core\Request\Capture;
@@ -76,7 +76,7 @@ final class ObtainTokenExtension implements ExtensionInterface
         }
 
         /** @var OrderInterface $order */
-        $order = $this->orderRepository->find($payment->getOrderId());
+        $order = $payment->getOrder();
 
         if (!$order instanceof OrderInterface) {
             return;
