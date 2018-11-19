@@ -21,7 +21,7 @@
     "require": {
         "php": "^7.0",
         "coreshop/payum-heidelpay": "~1.0.0",
-        "coreshop/payum-bundle": "^2.0"
+        "coreshop/payum-bundle": "^1.0"
     },
     "config": {
         "bin-dir": "bin"
@@ -33,7 +33,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.0-dev"
+            "dev-master": "1.0-dev"
         },
         "pimcore": {
             "bundles": [
