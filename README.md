@@ -7,6 +7,7 @@ The Heidelpay Payum Implementation currently only supports following gateways:
  - PayPal
  - Klarna Sofort
  - Credit Card
+ - Debit Card
 
 ## Installation
 
