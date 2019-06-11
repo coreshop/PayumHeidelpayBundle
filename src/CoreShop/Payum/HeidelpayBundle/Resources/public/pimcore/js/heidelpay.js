@@ -18,7 +18,8 @@ coreshop.provider.gateways.heidelpay = Class.create(coreshop.provider.gateways.a
             data: [
                 ['PayPal'],
                 ['Sofort'],
-                ['CreditCard']
+                ['CreditCard'],
+                ['DebitCard']
             ]
         });
 
