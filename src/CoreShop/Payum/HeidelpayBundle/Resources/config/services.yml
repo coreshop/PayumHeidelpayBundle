@@ -1,4 +1,7 @@
 services:
+    _defaults:
+        public: true
+        
     CoreShop\Payum\HeidelpayBundle\Form\Payment\HeidelpayType:
         tags:
             - { name: coreshop.gateway_configuration_type, type: heidelpay }
