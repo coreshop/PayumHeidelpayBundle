@@ -17,6 +17,7 @@ use CoreShop\Component\Core\Model\CustomerInterface;
 use CoreShop\Component\Order\Model\OrderInterface;
 use CoreShop\Component\Order\Repository\OrderRepositoryInterface;
 use CoreShop\Component\Core\Model\PaymentInterface;
+use MoneyMath\Decimal2;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionInterface;
@@ -24,9 +25,7 @@ use Payum\Core\Request\Convert;
 
 final class PopulateHeidelpayExtension implements ExtensionInterface
 {
-    /**
-     * @var OrderRepositoryInterface
-     */
+    /** @var OrderRepositoryInterface */
     private $orderRepository;
 
     /**
@@ -40,7 +39,7 @@ final class PopulateHeidelpayExtension implements ExtensionInterface
     /**
      * @param Context $context
      */
-    public function onPostExecute(Context $context)
+    public function onPostExecute(Context $context): void
     {
         $action = $context->getAction();
 
@@ -99,24 +98,30 @@ final class PopulateHeidelpayExtension implements ExtensionInterface
 
         $result['language'] = $gatewayLanguage;
         $result['customer'] = $customerData;
-        $result['basket']['amount'] = round($result['basket']['amount'] / 100, 2);
+        $result['basket']['amount'] = $this->calcAmount($result['basket']['amount']);
 
-        $request->setResult((array)$result);
-
+        $request->setResult($result);
     }
 
     /**
-     * {@inheritdoc}
+     * @param int $amount
+     * @return string
      */
-    public function onPreExecute(Context $context)
+    private function calcAmount(int $amount): string
     {
+        $dividend = new Decimal2((string) $amount);
+        $divisor = new Decimal2('100.00');
 
+        return (string) Decimal2::div($dividend, $divisor);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function onExecute(Context $context)
+    /** {@inheritdoc} */
+    public function onPreExecute(Context $context): void
+    {
+    }
+
+    /** {@inheritdoc} */
+    public function onExecute(Context $context): void
     {
     }
 }
