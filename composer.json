@@ -22,7 +22,7 @@
         "php": ">=7.1",
         "coreshop/payum-heidelpay": "^1.0",
         "coreshop/payum-bundle": "^2.0",
-        "ikr/money-math": "^1.0"
+        "moneyphp/money": "^3.2"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master"

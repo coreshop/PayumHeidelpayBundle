@@ -17,7 +17,10 @@ use CoreShop\Component\Core\Model\CustomerInterface;
 use CoreShop\Component\Order\Model\OrderInterface;
 use CoreShop\Component\Order\Repository\OrderRepositoryInterface;
 use CoreShop\Component\Core\Model\PaymentInterface;
-use MoneyMath\Decimal2;
+use Money\Currencies\ISOCurrencies;
+use Money\Currency;
+use Money\Formatter\DecimalMoneyFormatter;
+use Money\Money;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionInterface;
@@ -105,14 +108,16 @@ final class PopulateHeidelpayExtension implements ExtensionInterface
 
     /**
      * @param int $amount
+     * @param string $currency
      * @return string
      */
-    private function calcAmount(int $amount): string
+    private function calcAmount(int $amount, string $currency = 'EUR'): string
     {
-        $dividend = new Decimal2((string) $amount);
-        $divisor = new Decimal2('100.00');
+        $money = new Money($amount, new Currency($currency));
+        $currencies = new ISOCurrencies();
+        $moneyFormatter = new DecimalMoneyFormatter($currencies);
 
-        return (string) Decimal2::div($dividend, $divisor);
+        return $moneyFormatter->format($money);
     }
 
     /** {@inheritdoc} */
