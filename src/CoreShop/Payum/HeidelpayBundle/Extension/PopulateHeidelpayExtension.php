@@ -17,6 +17,11 @@ use CoreShop\Component\Core\Model\CustomerInterface;
 use CoreShop\Component\Order\Model\OrderInterface;
 use CoreShop\Component\Order\Repository\OrderRepositoryInterface;
 use CoreShop\Component\Core\Model\PaymentInterface;
+use CoreShop\Payum\HeidelpayBundle\HeidelpayBundleException;
+use Money\Currencies\ISOCurrencies;
+use Money\Currency;
+use Money\Formatter\DecimalMoneyFormatter;
+use Money\Money;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Extension\Context;
 use Payum\Core\Extension\ExtensionInterface;
@@ -24,9 +29,7 @@ use Payum\Core\Request\Convert;
 
 final class PopulateHeidelpayExtension implements ExtensionInterface
 {
-    /**
-     * @var OrderRepositoryInterface
-     */
+    /** @var OrderRepositoryInterface */
     private $orderRepository;
 
     /**
@@ -39,8 +42,9 @@ final class PopulateHeidelpayExtension implements ExtensionInterface
 
     /**
      * @param Context $context
+     * @throws HeidelpayBundleException
      */
-    public function onPostExecute(Context $context)
+    public function onPostExecute(Context $context): void
     {
         $action = $context->getAction();
 
@@ -70,7 +74,8 @@ final class PopulateHeidelpayExtension implements ExtensionInterface
             $gatewayLanguage = $order->getLocaleCode();
 
             if (strpos($gatewayLanguage, '_') === true) {
-                $gatewayLanguage = reset(explode('_', $gatewayLanguage));
+                $splitGatewayLLanguage = explode('_', $gatewayLanguage);
+                $gatewayLanguage = array_shift($splitGatewayLLanguage);
             }
 
             /**
@@ -79,6 +84,10 @@ final class PopulateHeidelpayExtension implements ExtensionInterface
              */
             $customer = $order->getCustomer();
             $invoiceAddress = $order->getInvoiceAddress();
+
+            if ($customer === null || $invoiceAddress === null) {
+                throw new HeidelpayBundleException('Missing Customer Data.');
+            }
 
             $customerData = [
                 'name' => $customer->getFirstname(),
@@ -99,24 +108,32 @@ final class PopulateHeidelpayExtension implements ExtensionInterface
 
         $result['language'] = $gatewayLanguage;
         $result['customer'] = $customerData;
-        $result['basket']['amount'] = round($result['basket']['amount'] / 100, 2);
+        $result['basket']['amount'] = $this->calcAmount($result['basket']['amount'], $payment->getCurrencyCode());
 
-        $request->setResult((array)$result);
-
+        $request->setResult($result);
     }
 
     /**
-     * {@inheritdoc}
+     * @param int $amount
+     * @param string $currency
+     * @return string
      */
-    public function onPreExecute(Context $context)
+    private function calcAmount(int $amount, string $currency): string
     {
+        $money = new Money($amount, new Currency($currency));
+        $currencies = new ISOCurrencies();
+        $moneyFormatter = new DecimalMoneyFormatter($currencies);
 
+        return $moneyFormatter->format($money);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function onExecute(Context $context)
+    /** {@inheritdoc} */
+    public function onPreExecute(Context $context): void
+    {
+    }
+
+    /** {@inheritdoc} */
+    public function onExecute(Context $context): void
     {
     }
 }
