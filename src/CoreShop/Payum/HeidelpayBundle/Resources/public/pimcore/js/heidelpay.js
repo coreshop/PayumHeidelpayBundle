@@ -28,7 +28,7 @@ coreshop.provider.gateways.heidelpay = Class.create(coreshop.provider.gateways.a
                 xtype: 'checkbox',
                 fieldLabel: t('heidelpay_sandboxMode'),
                 name: 'gatewayConfig.config.sandboxMode',
-                value: config.sandboxMode ? config.sandboxMode : true
+                value: config.sandboxMode
             },
             {
                 xtype: 'combobox',
