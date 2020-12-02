@@ -1,4 +1,7 @@
 # CoreShop Heidelpay Payum Connector
+
+> This repository is not longer maintained and recommends to use [PayumUnzerBundle](https://github.com/coreshop/PayumUnzerBundle).
+
 This Bundle activates the Heidelpay PaymentGateway in CoreShop.
 It requires the [coreshop/payum-heidelpay](https://github.com/coreshop/payum-heidelpay) repository which will be installed automatically.
 
